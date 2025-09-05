@@ -1,2 +1,2 @@
-web: node server.js
-worker: node worker.js
+web: pm2 start pm2.config.cjs --only server --no-daemon --attach
+worker: pm2 start pm2.config.cjs --only worker --no-daemon --attach
