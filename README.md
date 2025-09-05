@@ -19,7 +19,7 @@ $ brew services start redis
 
 1. `npm install`
 2. `npm start`
-3. [http://localhost:5000](http://localhost:5000)
+3. [http://localhost:5001](http://localhost:5001)
 
 ## Deploying
 
@@ -29,6 +29,7 @@ $ cd node-workers-example
 
 $ heroku create
 $ heroku addons:create heroku-redis
+$ heroku addons:wait
 $ git push heroku main
 $ heroku ps:scale worker=1
 $ heroku open
@@ -36,7 +37,7 @@ $ heroku open
 
 ## Application Overview
 
-The application is comprised of two process: 
+The application comprises two process: 
 
 - **`web`** - An [Express](https://expressjs.com/) server that serves the frontend assets, accepts new background jobs, and reports on the status us existing jobs
 - **`worker`** - A small node process that listens for and executes incoming jobs
