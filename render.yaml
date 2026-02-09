@@ -7,9 +7,9 @@ projects:
           - type: web
             name: node-workers-web
             runtime: node
-            plan: free
+            plan: starter
             region: oregon
-            buildCommand: npm ci
+            buildCommand: npm install
             startCommand: pm2 start pm2.config.cjs --only server --no-daemon --attach
             envVars:
               - key: NODE_ENV
@@ -19,6 +19,7 @@ projects:
                   type: keyvalue
                   name: node-workers-cache
                   property: connectionString
+              - fromGroup: node-workers-env
 
           # Background worker (from Heroku worker dyno)
           - type: worker
@@ -26,7 +27,7 @@ projects:
             runtime: node
             plan: starter
             region: oregon
-            buildCommand: npm ci
+            buildCommand: npm install
             startCommand: pm2 start pm2.config.cjs --only worker --no-daemon --attach
             envVars:
               - key: NODE_ENV
@@ -36,11 +37,18 @@ projects:
                   type: keyvalue
                   name: node-workers-cache
                   property: connectionString
+              - fromGroup: node-workers-env
 
           # Key Value store (from Heroku Redis add-on)
           - type: keyvalue
             name: node-workers-cache
-            plan: free
+            plan: starter
             ipAllowList:
               - source: 0.0.0.0/0
                 description: everywhere
+
+        envVarGroups:
+          - name: node-workers-env
+            envVars:
+              - key: WEB_CONCURRENCY
+                value: "1"
