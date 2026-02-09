@@ -23,7 +23,7 @@ projects:
           - type: worker
             name: node-workers-worker
             runtime: node
-            plan: free
+            plan: starter
             buildCommand: npm install
             startCommand: node worker.js
             envVars:
@@ -39,5 +39,5 @@ projects:
           - type: keyvalue
             name: node-workers-redis
             plan: free
-            maxmemoryPolicy: allkeys-lru
+            maxmemoryPolicy: noeviction
             ipAllowList: []
