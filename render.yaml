@@ -1,0 +1,43 @@
+projects:
+  - name: node-workers-example
+    environments:
+      - name: production
+        services:
+          - type: web
+            name: node-workers-example-web
+            runtime: node
+            plan: starter
+            region: oregon
+            buildCommand: npm install
+            startCommand: pm2 start pm2.config.cjs --only server --no-daemon --attach
+            envVars:
+              - key: REDIS_URL
+                fromService:
+                  type: keyvalue
+                  name: node-workers-example-cache
+                  property: connectionString
+              - key: WEB_CONCURRENCY
+                value: 1
+
+          - type: worker
+            name: node-workers-example-worker
+            runtime: node
+            plan: starter
+            region: oregon
+            buildCommand: npm install
+            startCommand: pm2 start pm2.config.cjs --only worker --no-daemon --attach
+            envVars:
+              - key: REDIS_URL
+                fromService:
+                  type: keyvalue
+                  name: node-workers-example-cache
+                  property: connectionString
+              - key: WEB_CONCURRENCY
+                value: 1
+
+          - type: keyvalue
+            name: node-workers-example-cache
+            plan: starter
+            ipAllowList:
+              - source: 0.0.0.0/0
+                description: everywhere
